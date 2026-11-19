@@ -71,19 +71,20 @@ whole TV at [AdGuard DNS](https://adguard-dns.io/) to block ad and tracker domai
 | Preinstalled apps | **Disabled**, never uninstalled, and only the ones you approve | Re-enabled by `undo.sh`, or one at a time |
 | DNS, animations, TCL privacy switches | Android settings; each old value is recorded first | Restored by `undo.sh` |
 | Background activity | Optional per app (e.g. stop YouTube running in the background) | Restored by `undo.sh` |
+| TCL remote Settings button | Optional standalone helper for the physical Settings button | `scripts/settings-button.sh remove` |
 
-Everything is recorded in `state/<your-tv>/` on your computer, together with a full snapshot taken before
-the first change. `scripts/undo.sh` puts the TV back exactly as it was.
+The TV backup and debloat records are saved in `state/<your-tv>/` on your computer. Use the
+matching undo command in the table to reverse a change.
 
 ## Safety
 
 The playbook in [AGENTS.md](AGENTS.md) holds the agent to these rules:
 
 - **Backup first.** The scripts refuse to change anything until a backup exists.
-- **Disable, never uninstall.** Everything comes back with one command.
+- **Disable preinstalled apps.** The undo script can re-enable them.
 - **You approve the list.** Nothing is disabled until you've seen it and said yes.
 - **Hands off the essentials.** Play Services, Play Store, keyboards, HDMI inputs, remote pairing,
-  Bluetooth and Settings are on a hard-coded block list.
+  Bluetooth, Settings and TCL Game Bar are on a hard-coded block list.
 - **No root, no sign-ins, no pirate apps.** Plain ADB only. The agent never types your passwords.
 
 ## Works with
@@ -110,11 +111,33 @@ scripts/undo.sh                          # whenever you want it all back
 Extras: `scripts/key.sh home|back|ok|…`, `scripts/screenshot.sh`, `scripts/ui.sh`,
 `scripts/youtube.sh <url>`, `scripts/lights.py find|pair|test|on|off`.
 
+## TCL remote Settings and Game Master
+
+Older Liftoff versions listed TCL Game Bar as a cleanup candidate. If it was disabled, run
+`adb -s "$TV" shell pm enable --user 0 com.tcl.gamebar` with `TV` set to your TV's ADB address.
+Game Master can be checked from TCL Quick Settings while the console's HDMI input is active.
+
+On some TCL Google TVs, the stock Google TV launcher handles the physical Settings button.
+If that button stops working after disabling the stock launcher, Liftoff has an optional helper
+that opens TCL's native Quick Settings. The original repair was tested on a TCL Q750G running
+Android 11 (G05/AR71). The helper handles the TCL Settings keycode used by that firmware, and
+button mappings may vary on other models.
+
+1. Run `scripts/backup.sh` if this TV has no Liftoff backup, then run `scripts/settings-button.sh install`.
+2. Open system settings from the home screen. Under **System → Accessibility**, enable **Liftoff Settings Button**.
+   Enable one Settings-button helper at a time. The helper needs key-filtering access to catch the gear press.
+3. Run `scripts/settings-button.sh status` to confirm the service is running. On the console's HDMI
+   input, press the physical Settings button, check Game Master, then verify Back returns to HDMI
+   and Home opens your launcher. Repeat the physical checks after a restart.
+
+Run `scripts/settings-button.sh remove` to uninstall the optional helper. To build only its APK, run
+`scripts/build.sh --settings-button`. The result is `build/settings-button/LiftoffSettingsButton.apk`.
+
 ## FAQ
 
-**Will this break my TV?** It's designed not to: nothing is uninstalled, the essentials are blocked,
-and `undo.sh` reverses everything. The one known rough edge: disabling the stock Google TV home can make
-some TVs forget saved Wi-Fi, so the agent asks twice before doing it and you should have your Wi-Fi password handy.
+**Will this break my TV?** Liftoff protects essential packages and records changes so `undo.sh` can
+reverse them. Before disabling Google TV Home, check the
+[Wi-Fi and remote Settings effects](AGENTS.md#the-rules-non-negotiable).
 
 **Does it survive a reboot?** Yes. Disabled apps stay disabled and Liftoff stays the Home app.
 

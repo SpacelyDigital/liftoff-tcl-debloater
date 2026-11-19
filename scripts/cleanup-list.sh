@@ -9,6 +9,7 @@ keep="$(conf '[a["package"] for a in c.get("apps",[])]' ; conf '(c.get("nowPlayi
 printf '%-11s %-9s %-34s %-48s %s\n' CATEGORY RISK APP PACKAGE WHY
 while IFS=$'\t' read -r pkg name cat risk why; do
   [ "$pkg" = package ] && continue
+  protected "$pkg" && continue
   grep -qx "$pkg" <<<"$installed" || continue
   grep -qx "$pkg" <<<"$disabled" && continue
   grep -qx "$pkg" <<<"$keep" && continue
@@ -18,5 +19,6 @@ echo
 echo "Other apps you installed or that came preinstalled (not in the catalog, not in your apps list):"
 known="$(cut -f1 "$ROOT/catalog/debloat.tsv")"
 for p in $(sh_tv pm list packages -3 -e | sed 's/^package://' | sort); do
+  protected "$p" && continue
   grep -qx "$p" <<<"$known" || grep -qx "$p" <<<"$keep" || [ "$p" = app.liftoff.home ] || echo "  $p"
 done

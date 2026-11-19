@@ -29,6 +29,7 @@ if [ "$(conf 'c.get("tweaks",{}).get("tclPrivacySwitches")')" = true ]; then
 fi
 
 for p in $(conf 'c.get("tweaks",{}).get("noBackground")'); do
+  if protected "$p"; then warn "Skipping background restriction for $p: protected."; continue; fi
   sh_tv pm list packages "$p" | grep -qx "package:$p" || continue
   old="$(sh_tv cmd appops get "$p" RUN_ANY_IN_BACKGROUND | sed -n 's/.*: \([a-z]*\).*/\1/p' | head -1)"
   grep -q "^$p	" "$AREC" || printf '%s\tRUN_ANY_IN_BACKGROUND\t%s\n' "$p" "${old:-allow}" >> "$AREC"

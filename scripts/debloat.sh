@@ -12,7 +12,7 @@ ls -d "$D"/backup-* >/dev/null 2>&1 || die "No backup for this TV yet. Run scrip
 REC="$D/disabled.txt"; touch "$REC"
 home="$(sh_tv cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME | tail -1)"
 for p in "$@"; do
-  if protected "$p"; then warn "Skipping $p: protected (Play Services, Play Store, keyboard, inputs, Settings or system)."; continue; fi
+  if protected "$p"; then warn "Skipping $p: protected (Play Services, Play Store, keyboard, inputs, Settings, gaming controls or system)."; continue; fi
   if ! sh_tv pm list packages "$p" | grep -qx "package:$p"; then warn "Skipping $p: not installed."; continue; fi
   if sh_tv pm list packages -d | grep -qx "package:$p"; then say "$p is already disabled."; continue; fi
   risk="$(awk -F'\t' -v p="$p" '$1==p {print $4}' "$ROOT/catalog/debloat.tsv")"

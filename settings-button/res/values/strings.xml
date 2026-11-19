@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_button_name">Liftoff Settings Button</string>
+    <string name="service_description">Opens TCL Quick Settings when you press the Settings button on the remote.</string>
+</resources>

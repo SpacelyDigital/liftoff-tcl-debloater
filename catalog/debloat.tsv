@@ -9,7 +9,7 @@ com.tcl.smartlink.core	TCL silent installer	ads	safe	Installs apps on its own at
 com.google.android.feedback	Google Feedback	tracking	safe	Sends feedback and crash reports.
 android.autoinstalls.config.google.gtvpai	Play Auto Install	ads	safe	Pushes preinstalled promo apps back onto the TV.
 com.google.android.videos	Google TV (Freeplay)	home	safe	Google TV store and free movies.
-com.google.android.apps.tv.launcherx	Google TV home screen	home	risky	The stock home screen. Only disable after Liftoff is the Home app. On some TVs this (or the setup app) forgets saved Wi-Fi; have the Wi-Fi password or Ethernet ready.
+com.google.android.apps.tv.launcherx	Google TV home screen	home	risky	The stock home screen. Only disable after Liftoff is the Home app. On some TVs this (or the setup app) forgets saved Wi-Fi; have the Wi-Fi password or Ethernet ready. Some TCL remotes also lose the Settings button because Google TV handles it. Test it from an active HDMI input.
 com.google.android.tungsten.setupwraith	Google TV setup / fallback home	home	risky	Can grab the Home button back. Disabling it made one TV forget its saved Wi-Fi. Usually not needed: set-home-activity is enough.
 com.tcl.dashboard	TCL Home	home	safe	TCL's home panel.
 com.tcl.tv.tclhome_passive	TCL Home (passive)	home	safe	Second TCL home app.
@@ -20,7 +20,6 @@ com.tcl.assistant	TCL Assistant wrapper	voice	caution	Routes the remote's mic to
 com.tcl.smartalexa	Alexa	voice	safe	Amazon Alexa integration.
 com.tcl.esticker	eSticker	junk	safe	Showroom feature stickers.
 com.tcl.exhibit	Store demo mode	junk	safe	Showroom demo.
-com.tcl.gamebar	Game Bar	junk	safe	Gaming overlay.
 com.tcl.ui_mediaCenter	Media	junk	caution	USB media player. Keep it if the user plays files from USB drives.
 com.tcl.repairguide	Repair Guide	junk	safe	Troubleshooting guide.
 com.tcl.usercenter	TCL account	junk	safe	TCL sign-in.

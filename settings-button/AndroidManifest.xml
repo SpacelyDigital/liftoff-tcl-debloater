@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="app.liftoff.settingsbutton" android:versionCode="1" android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="30" android:targetSdkVersion="30" />
+    <queries>
+        <package android:name="com.tcl.settings" />
+    </queries>
+    <application android:label="@string/settings_button_name" android:allowBackup="false">
+        <activity android:name=".SetupActivity" android:exported="true"
+            android:excludeFromRecents="true" android:theme="@android:style/Theme.NoDisplay" />
+        <service android:name=".SettingsButtonService" android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/settings_button" />
+        </service>
+    </application>
+</manifest>

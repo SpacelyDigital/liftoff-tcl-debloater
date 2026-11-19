@@ -8,20 +8,24 @@ Read it all before you run anything.
 
 1. **Back up first.** Run `scripts/backup.sh` before any change. No backup, no changes (the scripts enforce this).
 2. **Disable, never uninstall.** Preinstalled apps are only ever *disabled* (`pm disable-user`), so
-   `scripts/undo.sh` can bring every one back. The only thing ever uninstalled is Liftoff itself.
+   `scripts/undo.sh` can bring every one back. The uninstall commands apply to Liftoff and its optional helper.
 3. **Show the list and wait for OK.** Run `scripts/cleanup-list.sh`, show the user what you plan to
    disable in plain language (app name and why), and wait for an explicit yes. Drop anything they want to keep.
 4. **Never touch** Google Play Services, Play Store, keyboards / input methods, TV inputs and HDMI,
-   remote pairing, Bluetooth, AirPlay, Settings, or system UI. `scripts/lib.sh` refuses these
+   remote pairing, Bluetooth, AirPlay, Settings, Game Bar, or system UI. `scripts/lib.sh` refuses these
    (`PROTECTED_RE`); don't work around it.
 5. **No root, no exploits, no sideloaded mods.** Only standard `adb` commands.
 6. **No sign-ins.** Never type passwords, sign into accounts, or accept terms on the TV for the user.
    If something needs a sign-in, tell the user to do it with the remote.
 7. **No piracy.** Don't install or recommend pirate streaming apps, cracked APKs, or sites that host them.
-   Only install apps from the Play Store (the user does that) or from a project's official GitHub releases.
-8. **Risky packages need a second OK.** Items marked `risky` in `catalog/debloat.tsv` (the Google TV
-   home and its setup app) can make some TVs forget saved Wi-Fi. Only disable them with `--risky`
-   after telling the user exactly that, and after they confirm they have Ethernet or their Wi-Fi password.
+   Use apps from the Play Store (the user does that), a project's official GitHub releases, or
+   Liftoff's own local builds.
+8. **Risky packages need a second OK.** Disabling Google TV Home or its setup app can remove saved
+   Wi-Fi. Disabling Google TV Home can also break the physical Settings button on some TCL TVs.
+   Only use `--risky` after the user understands these effects and confirms they have Ethernet or
+   their Wi-Fi password. Test the physical Settings button on an active HDMI input before and
+   after changing Google TV Home. Follow the [TCL recovery steps](README.md#tcl-remote-settings-and-game-master)
+   if the button stops working.
 9. **Narrate.** Before each step, say in one line what you're about to do and why.
 
 ## 0. Prerequisites (on the computer)
@@ -109,8 +113,9 @@ and (after a few seconds) the weather.
 ## 8. Wrap up
 
 Tell the user what changed (apps disabled, tweaks, new Home), and how to undo:
-- everything: `scripts/undo.sh`
+- the launcher, debloat and tweaks: `scripts/undo.sh`
 - one app: `adb -s <tv> shell pm enable --user 0 <package>`
+- optional TCL Settings-button helper: `scripts/settings-button.sh remove`
 
 Remind them: if they ever want a TCL firmware update and disabled `com.tcl.ttvs`, re-enable it first.
 
